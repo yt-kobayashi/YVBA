@@ -3,9 +3,10 @@ Option Explicit
 
 '+------------------------------------------------------------------------------------------------------------------------
 '| YVBA YVBA_GetReferenceGUID
+'|      YVBA_PrintReferenceGUID
 '|
-'| 参照設定で追加/削除したいライブラリをそれぞれ指定することで，一括処理するマクロ．
-'| 追加マクロと削除マクロがある．
+'| 参照ライブラリ名からGUIDなどを取得するマクロです．
+'| 参照ライブラリ名を"Reference List"ワークシートに出力するマクロも付属しています．
 '+------------------------------------------------------------------------------------------------------------------------
 '| MIT License
 '|
@@ -30,6 +31,15 @@ Option Explicit
 '| SOFTWARE.
 '+------------------------------------------------------------------------------------------------------------------------
 
+Private Const PRINT_SHEETNAME As String = "Reference List"  ' 出力シート名を変更したい場合はここを変更する．
+
+'+------------------------------------------------------------------------------------------------------------------------
+'| YVBA YVBA_GetReferenceGUID
+'| 参照ライブラリ名からGUIDなどを取得するマクロです．
+'|
+'| [引数] referenceList     :   参照ライブラリ名が1つ以上含まれているArrayList
+'| [戻値] referenceGUIDList :   対象のライブラリのGUIDが含まれているArrayList
+'+------------------------------------------------------------------------------------------------------------------------
 Function YVBA_GetReferenceGUID(referenceList As Object) As Object
     Dim locator As Object
     Dim service As Object
@@ -89,6 +99,10 @@ CONTINUE:
     Set YVBA_GetReferenceGUID = referenceGUIDList
 End Function
 
+'+------------------------------------------------------------------------------------------------------------------------
+'| YVBA YVBA_GetReferenceGUID
+'| 参照ライブラリ名を"Reference List"ワークシートに出力するマクロです．
+'+------------------------------------------------------------------------------------------------------------------------
 Sub YVBA_PrintReferenceGUID()
     Dim locator As Object
     Dim service As Object
@@ -148,7 +162,7 @@ CONTINUE:
     Set registry = Nothing
     
     ThisWorkbook.Worksheets.Add after:=Worksheets(Worksheets.count)
-    ActiveSheet.Name = "Reference List"
+    ActiveSheet.Name = PRINT_SHEETNAME
     With ThisWorkbook.Worksheets("Reference List")
         .Range(.Cells(1, 1), .Cells(UBound(typeLibKeys), 4)) = referenceList
         Call .Range(.Cells(1, 1), .Cells(UBound(typeLibKeys), 4)).Sort(Range("A1"))
