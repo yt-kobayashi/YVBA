@@ -33,18 +33,26 @@ Option Explicit
 
 Sub YVBA_AddReference()
     Dim referenceList As Object
+    Dim referenceGUIDList As Object
     Set referenceList = CreateObject("System.Collections.ArrayList")
+    Set referenceGUIDList = CreateObject("System.Collections.ArrayList")
     
-'   ここに追加したいライブラリのGUID等を入れる
+    Set referenceList = Nothing
+    
+'   ここに参照設定に追加したいライブラリ名を入れる
     With referenceList
-        .Add Array("{B691E011-1797-432E-907A-4D8C69339129}", 6, 1)
+        '.Add "Microsoft Scripting Runtime"
+        '.Add "Microsoft Visual Studio Project Model (10.0)"
+        '.Add "Microsoft ActiveX Data Objects 6.1 Library"
     End With
+    
+    Set referenceGUIDList = YVBA_GetReferenceGUID(referenceList)
     
     On Error GoTo ErrorCheck:
     Dim referenceData As Variant
     Dim reference As Variant
     
-    For Each referenceData In referenceList
+    For Each referenceData In referenceGUIDList
         Set reference = ThisWorkbook.VBProject.References.AddFromGuid(referenceData(0), referenceData(1), referenceData(2))
     Next referenceData
     
@@ -65,9 +73,11 @@ Sub YVBA_RemoveReference()
     Dim referenceList As Object
     Set referenceList = CreateObject("System.Collections.ArrayList")
     
-'   ここに削除したい参照設定の名前を入れる
+'   ここに参照設定から削除したいライブラリ名を入れる
     With referenceList
-        .Add "Microsoft ActiveX Data Objects 6.1 Library"
+        .Add "Microsoft Scripting Runtime"
+        .Add "Microsoft Visual Studio Project Model (10.0)"
+        '.Add "Microsoft ActiveX Data Objects 6.1 Library"
     End With
     
     
