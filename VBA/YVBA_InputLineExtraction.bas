@@ -45,6 +45,7 @@ Sub YVBA_InputLineExtraction()
     
     Set originalWorksheet = ThisWorkbook.Worksheets(originalWorksheetName)
     Set pasteWorksheet = ThisWorkbook.Worksheets(pasteWorksheetName)
+    pasteWorksheet.Cells.Clear
     
 
 '   g—pÏ‚İƒZƒ‹”ÍˆÍ‚ğæ“¾‚·‚é
