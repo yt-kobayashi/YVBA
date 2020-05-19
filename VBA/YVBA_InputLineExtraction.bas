@@ -38,7 +38,7 @@ Private Const pasteWorksheetName As String = "使用済みIPアドレス"   ' 貼り付け先
 Private Const keyColumn As Long = 2                                 ' 入力されているか判別したい列を指定する(A=1, B=2, ... , Z=26)
 Private Const pasteCellPosition As String = "A1"                    ' 貼り付け先のワークシートの座標を指定する
 
-Sub Update()
+Sub YVBA_InputLineExtraction()
     Dim pasteWorksheet As Worksheet
     Dim originalWorksheet As Worksheet
     Dim rowLimit As Long
