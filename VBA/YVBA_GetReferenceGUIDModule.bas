@@ -32,6 +32,8 @@ Option Explicit
 '+------------------------------------------------------------------------------------------------------------------------
 
 Private Const PRINT_SHEETNAME As String = "Reference List"  ' 出力シート名を変更したい場合はここを変更する．
+Private Const HKEY_CLASSES_ROOT = &H80000000                ' レジストリにある項目を示す定数．
+Private Const REGISTRY_KEY As String = "TypeLib"            ' インターフェースライブラリ(参照設定で見れるライブラリが格納されている)
 
 '+------------------------------------------------------------------------------------------------------------------------
 '| YVBA YVBA_GetReferenceGUID
@@ -51,46 +53,43 @@ Function YVBA_GetReferenceGUID(referenceList As Object) As Object
     Dim referenceName As Variant
     Dim guid As String
     Dim version As Variant
-    Dim count As Long
-    Dim subCount As Long
+    Dim guidLoopCnt As Long
+    Dim versionLoopCnt As Long
     
     Set referenceGUIDList = CreateObject("System.Collections.ArrayList")
-    Set locator = CreateObject("WbemScripting.SWbemLocator")
-    Set service = locator.ConnectServer(vbNullString, "root\default")
-    Set registry = service.get("StdRegProv")
-    
-    Const HKEY_CLASSES_ROOT = &H80000000
-    Const REGISTRY_KEY As String = "TypeLib"
+    Set locator = CreateObject("WbemScripting.SWbemLocator")                ' Wbemを使用するためにオブジェクトを作成
+    Set service = locator.ConnectServer(vbNullString, "root\default")       ' ローカルWbemサーバ(WMI)に接続
+    Set registry = service.get("StdRegProv")                                ' サーバへクエリ発行
     
     searchKey = REGISTRY_KEY
     registry.EnumKey HKEY_CLASSES_ROOT, searchKey, typeLibKeys
     
-    For count = LBound(typeLibKeys) To UBound(typeLibKeys)
-        guid = typeLibKeys(count)
+    For guidLoopCnt = LBound(typeLibKeys) To UBound(typeLibKeys)
+        guid = typeLibKeys(guidLoopCnt)
         searchKey = REGISTRY_KEY & "\" & guid
         registry.EnumKey HKEY_CLASSES_ROOT, searchKey, typeLibSubKeys
         
         If IsArray(typeLibSubKeys) Then
-            For subCount = LBound(typeLibSubKeys) To UBound(typeLibSubKeys)
-                version = typeLibSubKeys(subCount)
-                searchKey = REGISTRY_KEY & "\" & guid & "\" & version
+            For versionLoopCnt = LBound(typeLibSubKeys) To UBound(typeLibSubKeys)
+                version = typeLibSubKeys(versionLoopCnt)
+                searchKey = searchKey & "\" & version
                 registry.GetStringValue HKEY_CLASSES_ROOT, searchKey, "", referenceName
                 
                 If IsNull(referenceName) Then
                     GoTo CONTINUE
                 End If
                 
-                version = Split(version, ".")
-                
                 If referenceList.Contains(referenceName) Then
+                    version = Split(version, ".")
+                
                     If IsNumeric(version(0)) And IsNumeric(version(1)) Then
                         referenceGUIDList.Add Array(guid, CLng(version(0)), CLng(version(1)), referenceName)
                     End If
                 End If
 CONTINUE:
-            Next subCount
+            Next versionLoopCnt
         End If
-    Next count
+    Next guidLoopCnt
     
     Set locator = Nothing
     Set service = Nothing
@@ -122,9 +121,6 @@ Sub YVBA_PrintReferenceGUID()
     Set locator = CreateObject("WbemScripting.SWbemLocator")
     Set service = locator.ConnectServer(vbNullString, "root\default")
     Set registry = service.get("StdRegProv")
-    
-    Const HKEY_CLASSES_ROOT = &H80000000
-    Const REGISTRY_KEY As String = "TypeLib"
     
     searchKey = REGISTRY_KEY
     registry.EnumKey HKEY_CLASSES_ROOT, searchKey, typeLibKeys
