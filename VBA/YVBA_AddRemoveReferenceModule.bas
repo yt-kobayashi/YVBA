@@ -41,11 +41,9 @@ Sub YVBA_AddReference()
     Set referenceList = CreateObject("System.Collections.ArrayList")
     Set referenceGUIDList = CreateObject("System.Collections.ArrayList")
     
-    Set referenceList = Nothing
-    
 '   ここに参照設定に追加したいライブラリ名を入れる
     With referenceList
-        '.Add "Microsoft Scripting Runtime"
+        .Add "Microsoft Scripting Runtime"
         '.Add "Microsoft Visual Studio Project Model (10.0)"
         '.Add "Microsoft ActiveX Data Objects 6.1 Library"
     End With
@@ -80,7 +78,7 @@ Sub YVBA_RemoveReference()
 '   ここに参照設定から削除したいライブラリ名を入れる
     With referenceList
         .Add "Microsoft Scripting Runtime"
-        .Add "Microsoft Visual Studio Project Model (10.0)"
+        '.Add "Microsoft Visual Studio Project Model (10.0)"
         '.Add "Microsoft ActiveX Data Objects 6.1 Library"
     End With
     
