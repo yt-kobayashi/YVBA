@@ -33,6 +33,16 @@ Option Explicit
 '+------------------------------------------------------------------------------------------------------------------------
 
 '+------------------------------------------------------------------------------------------------------------------------
+'| Auto_Open
+'| [概要]
+'|  Excelファイルを開いたときに自動で実行される関数です．
+'+------------------------------------------------------------------------------------------------------------------------
+Public FOLDER_PATH As String
+Sub Auto_Open()
+    FOLDER_PATH = ThisWorkbook.Path
+End Sub
+
+'+------------------------------------------------------------------------------------------------------------------------
 '| YVBA_GetFinalCellPosition
 '| [概要]
 '|  使用済み最終セル座標をRange型で取得します．
@@ -120,3 +130,37 @@ Function YVBA_ConvertCells2Range(rowValue As Long, colValue As Long, Optional po
     YVBA_ConvertCells2Range = positionVariable
 End Function
 
+'+------------------------------------------------------------------------------------------------------------------------
+'| YVBA_Join2D
+'| [概要]
+'|  2次元配列を文字列へ変換します．
+'|
+'| [引数]
+'|  targetArray()           :   変換対象の2次元配列
+'|  separator [省略可能]    :   区切り文字
+'|  result    [省略可能]    :   変換後の文字列を格納する変数
+'|
+'| [戻値]
+'|  変換後の文字列
+'+------------------------------------------------------------------------------------------------------------------------
+Function YVBA_Join2D(targetArray() As Variant, Optional separator As String = ",", Optional result As String) As String
+    Dim suffix(1) As Long
+    Dim joinLoop As Long
+    Dim rowArray() As Variant
+    Dim colArray() As Variant
+    
+    suffix(0) = UBound(targetArray, 1) - 1
+    suffix(1) = UBound(targetArray, 2) - 1
+    
+    ReDim rowArray(suffix(0))
+    ReDim colArray(suffix(1))
+    
+    For joinLoop = 0 To suffix(0)
+        colArray = WorksheetFunction.Index(targetArray, joinLoop + 1)
+        rowArray(joinLoop) = Join(colArray, separator)
+    Next joinLoop
+    
+    result = Join(rowArray, vbCrLf)
+    
+    YVBA_Join2D = result
+End Function

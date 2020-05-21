@@ -1,6 +1,4 @@
-Workbook/
-
-*.xlsx
-*.xlsm
-*.xls
-*.xlm
+Workbook/*.xlsx
+Workbook/*.xlsm
+Workbook/*.xls
+Workbook/*.xlm
