@@ -40,6 +40,7 @@ Option Explicit
 '+------------------------------------------------------------------------------------------------------------------------
 Enum DataSeparateType
     CSV = 1
+    TSV = 2
 End Enum
 
 '+------------------------------------------------------------------------------------------------------------------------
@@ -132,6 +133,8 @@ Function YVBA_SelectSeparator(separator As DataSeparateType) As Variant
     Select Case separator
     Case CSV
         separatorChar = Array(",", ".csv")
+    Case TSV
+        separatorChar = Array(vbTab, ".tsv")
     End Select
     
     YVBA_SelectSeparator = separatorChar
