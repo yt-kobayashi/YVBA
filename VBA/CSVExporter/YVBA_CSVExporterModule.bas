@@ -49,7 +49,7 @@ End Enum
 '| YVBA_CSVExporterÇÃé¿çsä÷êîÇ≈Ç∑ÅD
 '+------------------------------------------------------------------------------------------------------------------------
 Sub YVBA_RunCSVExporter()
-    YVBA_CSVExporter ThisWorkbook.Worksheets("ãKë•ìI")
+    YVBA_CSVExporter ThisWorkbook.Worksheets("Sample")
 End Sub
 
 '+------------------------------------------------------------------------------------------------------------------------
