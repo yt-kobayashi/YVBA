@@ -1,4 +1,4 @@
-Attribute VB_Name = "YVBA_InputLineExtraction"
+Attribute VB_Name = "YVBA_InputLineExtractionModule"
 Option Explicit
 
 '+------------------------------------------------------------------------------------------------------------------------
