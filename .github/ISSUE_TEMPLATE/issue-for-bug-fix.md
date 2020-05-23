@@ -1,7 +1,7 @@
 ---
 name: Issue for Bug fix
 about: バグ改修用テンプレート
-title: "[FIX] sample"
+title: "[FIX][Target] sample"
 labels: bug
 assignees: yt-kobayashi
 
