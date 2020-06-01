@@ -43,6 +43,34 @@ Sub Auto_Open()
 End Sub
 
 '+------------------------------------------------------------------------------------------------------------------------
+'| YVBA_GetArrayDimention
+'| [概要]
+'|  配列の次元数を取得します．
+'|
+'| [引数]
+'|  targetArray                     :   次元数を取得したい対象の配列
+'|
+'| [戻値]
+'|  次元数
+'+------------------------------------------------------------------------------------------------------------------------
+Function YVBA_GetArrayDimention(targetArray As Variant) As Long
+    Dim dimention As Long
+    Dim temp As Long
+    
+    On Error Resume Next
+    
+    dimention = 1
+    
+    Do While Err.Number = 0
+        dimention = dimention + 1
+        temp = UBound(targetArray, dimention)
+    Loop
+    On Error GoTo 0
+    
+    YVBA_GetArrayDimention = dimention - 1
+End Function
+
+'+------------------------------------------------------------------------------------------------------------------------
 '| YVBA_GetFinalCellPosition
 '| [概要]
 '|  使用済み最終セル座標をRange型で取得します．
@@ -66,8 +94,8 @@ Function YVBA_GetFinalCellPosition(targetSheet As Worksheet, Optional positionVa
     
     ' 使用済み最終セル座標を取得する
     With targetSheet.UsedRange
-        row = .Rows(.Rows.Count).row
-        col = .Columns(.Columns.Count).Column
+        row = .Rows(.Rows.count).row
+        col = .Columns(.Columns.count).Column
     End With
     
     ' 表示形式選択
@@ -156,7 +184,7 @@ Function YVBA_Join2D(targetArray() As Variant, Optional separator As String = ",
     ReDim colArray(suffix(1))
     
     For joinLoop = 0 To suffix(0)
-        colArray = WorksheetFunction.Index(targetArray, joinLoop + 1)
+        colArray = WorksheetFunction.index(targetArray, joinLoop + 1)
         rowArray(joinLoop) = Join(colArray, separator)
     Next joinLoop
     
